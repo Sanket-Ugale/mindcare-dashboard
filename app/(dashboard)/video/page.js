@@ -5,9 +5,28 @@ import { useEffect, useState } from "react";
 const VideoCallPage = () => {
   const [isWindowDefined, setIsWindowDefined] = useState(false);
   const [videoCall, setVideoCall] = useState(false);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     setIsWindowDefined(typeof window !== "undefined");
+  }, []);
+
+  useEffect(() => {
+    fetch('https://mindcare-app.onrender.com/api/appointments/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_profile_id: 1,
+        mentor_profile_id: 1,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => setToken(data.payload[0].appointment_token))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }, []);
 
   const callbacks = {
@@ -21,8 +40,7 @@ const VideoCallPage = () => {
   const rtcProps = {
     appId: "ced4e343c11f4cefb701f5c8ec2bf880",
     channel: "Appointment1",
-    token:
-      "007eJxTYIi/LC9y2cVY6Nd94af2F2TNf0jrMX7prRCSSb2lfzTgt7cCQ1KqaVqyRWpyqnGapYmhuamFhVFSsqGZYZpBSpKhYUryrYXfUhsCGRn0tV8yMEIhiM/D4FhQkJ+ZV5KbmldiyMAAABGAIkY=",
+    token: token,
   };
 
   return isWindowDefined ? (
