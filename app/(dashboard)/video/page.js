@@ -12,16 +12,8 @@ const VideoCallPage = () => {
   }, []);
 
   useEffect(() => {
-    fetch('https://mindcare-app.onrender.com/api/appointments/', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_profile_id: 1,
-        mentor_profile_id: 1,
-      }),
-    })
+    const appointmentId = 1; // replace with your appointment id
+    fetch(`https://mindcare-app.onrender.com/api/appointments/${appointmentId}`)
     .then(response => response.json())
     .then(data => setToken(data.payload[0].appointment_token))
     .catch((error) => {
